@@ -5,7 +5,8 @@
 // sliding puzzle: https://thecodingtrain.com/CodingChallenges/165-slide-puzzle.html
 
 let character;
-let char_img;
+let charIndex;
+let charHeight = [168, 148, 115];
 
 let ball_img, can_img, chicken_img, fish_img, rock1_img, rock2_img;
 
@@ -20,19 +21,23 @@ let gameOver = false;
 
 let score = 0;
 // let remainingTime = 60;
-let remainingTime = 20;
+let remainingTime = 10;
 
 let gameOverText;
 let playAgain;
 
 function preload() {
   font = loadFont('data/font0.otf');
+
   char_img = loadImage('data/character.png');
   char2_img = loadImage('data/character_2.png');
+  char3_img = loadImage('data/character_3.png');
+
   ball_img = loadImage('data/ball.png');
   can_img = loadImage('data/can.png');
   chicken_img = loadImage('data/chicken.png');
   fish_img = loadImage('data/fish.png');
+
   rock1_img = loadImage('data/rock1.png');
   rock2_img = loadImage('data/rock2.png');
 }
@@ -57,21 +62,7 @@ function setup() {
   rocks1 = new Group();
   rocks2 = new Group();
 
-  character = createSprite(width / 2, height - 168, 100, 213);
-  // character.addImage(char_img);
-
-  if (keyWentDown(49)) {
-    // character = createSprite(width / 2, height - 168, 100, 213);
-    character.addImage(char_img);
-  }
-  else if (keyWentDown(50)) {
-    // character = createSprite(width / 2, height - 168, 86, 213);
-    character.addImage(char2_img);
-  }
-  else {
-    // character = createSprite(width / 2, height - 168, 100, 213);
-    character.addImage(char_img);
-  }
+  // character = createSprite(width / 2, height - 168, 100, 213);
 
 }
 
@@ -94,6 +85,28 @@ function draw() {
     textFont(font, 24);
     // text(howTo, width / 2 - 370, 250);
     text(howTo, width / 2, (height - 200) / 2 + 50);
+
+    // chooseChar();
+    if (keyWentDown('1')) {
+      charIndex = 0;
+      character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+      character.addImage(char_img);
+    }
+    else if (keyWentDown('2')) {
+      charIndex = 1;
+      character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+      character.addImage(char2_img);
+    }
+    else if (keyWentDown('3')) {
+      charIndex = 2;
+      character = createSprite(width / 2, height - charHeight[charIndex], 100, 82);
+      character.addImage(char3_img);
+    }
+    // else {
+    //   charIndex = 0;
+    //   character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+    //   character.addImage(char_img);
+    // }
   }
 
   else if (gameOver) {
@@ -107,13 +120,29 @@ function draw() {
     textFont(font, 24);
     text(playAgain, width / 2, (height - 200) / 2 + 100);
 
-    // allSprites.removeSprites();
-    balls.removeSprites();
-    cans.removeSprites();
-    chickens.removeSprites();
-    fish.removeSprites();
-    rocks1.removeSprites();
-    rocks2.removeSprites();
+    remainingTime = 10;
+    // balls.removeSprites();
+    // cans.removeSprites();
+    // chickens.removeSprites();
+    // fish.removeSprites();
+    // rocks1.removeSprites();
+    // rocks2.removeSprites();
+    if (keyWentDown('1')) {
+      charIndex = 0;
+      character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+      character.addImage(char_img);
+    }
+    else if (keyWentDown('2')) {
+      charIndex = 1;
+      character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+      character.addImage(char2_img);
+    }
+    else if (keyWentDown('3')) {
+      charIndex = 2;
+      character = createSprite(width / 2, height - charHeight[charIndex], 100, 82);
+      character.addImage(char3_img);
+    }
+    // chooseChar();
   }
 
   else {
@@ -266,17 +295,38 @@ function draw() {
       character.velocity.x = 0;
     }
 
-    console.log(height);
-    console.log(character.position.y);
-    character.position.y = height - 168;
+    character.position.y = height - charHeight[charIndex];
     drawSprites();
   }
 
   if (remainingTime == 0) {
     gameOver = true;
+    allSprites.removeSprites();
   }
 }
 
+function chooseChar() {
+  if (keyWentDown('1')) {
+    charIndex = 0;
+    character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+    character.addImage(char_img);
+  }
+  else if (keyWentDown('2')) {
+    charIndex = 1;
+    character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+    character.addImage(char2_img);
+  }
+  else if (keyWentDown('3')) {
+    charIndex = 2;
+    character = createSprite(width / 2, height - charHeight[charIndex], 100, 82);
+    character.addImage(char3_img);
+  }
+  else {
+    charIndex = 0;
+    character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
+    character.addImage(char_img);
+  }
+}
 
 function keyPressed() {
   if (keyCode === ENTER) {
@@ -288,7 +338,7 @@ function keyPressed() {
       gameStart = true;
       gameOver = false;
       score = 0;
-      remainingTime = 20;
+      remainingTime = 10;
       // remainingTime = 60;
 
       // move the character to its initial position
