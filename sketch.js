@@ -266,7 +266,9 @@ function draw() {
       character.velocity.x = 0;
     }
 
-    character.position.y = 586;
+    console.log(height);
+    console.log(character.position.y);
+    character.position.y = height - 168;
     drawSprites();
   }
 
