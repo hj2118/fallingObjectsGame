@@ -28,6 +28,7 @@ let playAgain;
 function preload() {
   font = loadFont('data/font0.otf');
   char_img = loadImage('data/character.png');
+  char2_img = loadImage('data/character_2.png');
   ball_img = loadImage('data/ball.png');
   can_img = loadImage('data/can.png');
   chicken_img = loadImage('data/chicken.png');
@@ -57,7 +58,21 @@ function setup() {
   rocks2 = new Group();
 
   character = createSprite(width / 2, height - 168, 100, 213);
-  character.addImage(char_img);
+  // character.addImage(char_img);
+
+  if (keyWentDown(49)) {
+    // character = createSprite(width / 2, height - 168, 100, 213);
+    character.addImage(char_img);
+  }
+  else if (keyWentDown(50)) {
+    // character = createSprite(width / 2, height - 168, 86, 213);
+    character.addImage(char2_img);
+  }
+  else {
+    // character = createSprite(width / 2, height - 168, 100, 213);
+    character.addImage(char_img);
+  }
+
 }
 
 function draw() {
@@ -251,6 +266,7 @@ function draw() {
       character.velocity.x = 0;
     }
 
+    character.position.y = 586;
     drawSprites();
   }
 
