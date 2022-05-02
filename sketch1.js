@@ -1,5 +1,7 @@
 // falling objects
 
+// https://www.youtube.com/watch?v=_H9JIwWP7HQ
+
 let character;
 let charIndex;
 let charHeight = [168, 140, 130, 143, 143, 135];
@@ -22,7 +24,6 @@ let chooseChar = false;
 let gameMode = 0;
 
 let score = 0;
-let scores = [];
 let remainingTime = 60;
 let survivingTime = 0;
 
@@ -32,23 +33,23 @@ let survivingTime = 0;
 let playAgain;
 
 function preload() {
-  font = loadFont('font0.otf');
+  font = loadFont('data/font0.otf');
 
-  char_img = loadImage('character.png');
-  char2_img = loadImage('character_2.png');
-  char3_img = loadImage('character_3.png');
-  char4_img = loadImage('character_4.png');
-  char5_img = loadImage('character_5.png');
-  char6_img = loadImage('character_6.png');
+  char_img = loadImage('data/character.png');
+  char2_img = loadImage('data/character_2.png');
+  char3_img = loadImage('data/character_3.png');
+  char4_img = loadImage('data/character_4.png');
+  char5_img = loadImage('data/character_5.png');
+  char6_img = loadImage('data/character_6.png');
 
-  ball_img = loadImage('ball.png');
-  can_img = loadImage('can.png');
-  wool_img = loadImage('wool.png');
-  chicken_img = loadImage('chicken.png');
-  fish_img = loadImage('fish.png');
+  ball_img = loadImage('data/ball.png');
+  can_img = loadImage('data/can.png');
+  wool_img = loadImage('data/wool.png');
+  chicken_img = loadImage('data/chicken.png');
+  fish_img = loadImage('data/fish.png');
 
-  rock1_img = loadImage('rock1.png');
-  rock2_img = loadImage('rock2.png');
+  rock1_img = loadImage('data/rock1.png');
+  rock2_img = loadImage('data/rock2.png');
 }
 
 function setup() {
@@ -61,6 +62,7 @@ function setup() {
   gameOverText = "GAME OVER";
   playAgain = "To play again press ENTER!";
 
+  // https://editor.p5js.org/denaplesk2/sketches/ryIBFP_lG
   setInterval(timeDecrease, 1000);
 
   balls = new Group();
@@ -73,6 +75,7 @@ function setup() {
 }
 
 function draw() {
+  console.log(survivingTime);
   // background
   noStroke();
   fill(135, 206, 235);
@@ -112,6 +115,8 @@ function draw() {
 
     image(rock2_img, width / 2 + 110, (height - 200) / 2 + 205);
     text(": -100", width / 2 + 200, (height - 200) / 2 + 238);
+
+    // chooseChar();
   }
 
   else if (!gameStart && chooseMode) {
@@ -234,12 +239,17 @@ function draw() {
 
   else if (!gameStart) {
     textAlign(CENTER);
-
+    // START GAME
     textFont(font, 32);
+    // text(startGame, width / 2 - 330, 200);
     text(startGameText, width / 2, (height - 200) / 2);
 
+    // use arrow keys...
     textFont(font, 24);
+    // text(howTo, width / 2 - 370, 250);
     text(howToText, width / 2, (height - 200) / 2 + 50);
+
+    // chooseChar();
   }
 
   else if (gameOver) {
@@ -270,16 +280,12 @@ function draw() {
       text(playAgain, width / 2, (height - 200) / 2 + 140);
       text(howToText, width / 2, (height - 200) / 2 + 190);
     }
+
+    // chooseChar();
   }
 
   else {
     chooseChar = false;
-
-		for (let i = 0; i < scores.length; i++) {
-			let aScore = scores[i];
-			aScore.update();
-			aScore.display();
-		}
 
     if (gameMode === 1) {  // high score
       textAlign(LEFT);
@@ -288,7 +294,7 @@ function draw() {
       text("Score: " + score, 20, 80);
 
       // rock1
-      if (random(1) < 0.006) {
+      if (random(1) < 0.005) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
         newRock1.addImage(rock1_img);
         newRock1.addToGroup(rocks1);
@@ -305,12 +311,11 @@ function draw() {
       if (character.collide(rocks1)) {
         character.overlap(rocks1, collect);
         score -= 200;
-				scores.push(new TempScore("-200", character.position.x));
-        // text("-200", character.position.x + 50, height - 200);
+        text("-200", character.position.x + 50, height - 200);
       }
 
       // rock2
-      if (random(1) < 0.008) {
+      if (random(1) < 0.007) {
         let newRock2 = createSprite(random(0, width), 20, 60, 52);
         newRock2.addImage(rock2_img);
         newRock2.addToGroup(rocks2);
@@ -327,8 +332,7 @@ function draw() {
       if (character.collide(rocks2)) {
         character.overlap(rocks2, collect);
         score -= 100;
-				scores.push(new TempScore("-100", character.position.x));
-        // text("-100", character.position.x + 50, height - 200);
+        text("-100", character.position.x + 50, height - 200);
       }
 
       if (remainingTime == 0) {
@@ -346,7 +350,7 @@ function draw() {
       text("Score: " + score, 20, 80);
 
       // rock1
-      if (random(1) < 0.006) {
+      if (random(1) < 0.005) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
         newRock1.addImage(rock1_img);
         newRock1.addToGroup(rocks1);
@@ -367,7 +371,7 @@ function draw() {
       }
 
       // rock2
-      if (random(1) < 0.008) {
+      if (random(1) < 0.007) {
         let newRock2 = createSprite(random(0, width), 20, 60, 52);
         newRock2.addImage(rock2_img);
         newRock2.addToGroup(rocks2);
@@ -407,8 +411,7 @@ function draw() {
     if (character.collide(balls)) {
       character.overlap(balls, collect);
       score += 30;
-			scores.push(new TempScore("+30", character.position.x));
-      // text("+30", character.position.x + 50, height - 200);
+      text("+30", character.position.x + 50, height - 200);
     }
 
     // can
@@ -429,8 +432,7 @@ function draw() {
     if (character.collide(cans)) {
       character.overlap(cans, collect);
       score += 100;
-			scores.push(new TempScore("+100", character.position.x));
-      // text("+100", character.position.x + 50, height - 200);
+      text("+100", character.position.x + 50, height - 200);
     }
 
     // wool
@@ -451,8 +453,7 @@ function draw() {
     if (character.collide(wools)) {
       character.overlap(wools, collect);
       score += 200;
-      // text("+200", character.position.x + 50, height - 200);
-			scores.push(new TempScore("+200", character.position.x));
+      text("+200", character.position.x + 50, height - 200);
     }
 
     // chicken
@@ -473,8 +474,7 @@ function draw() {
     if (character.collide(chickens)) {
       character.overlap(chickens, collect);
       score += 70;
-      // text("+70", character.position.x + 50, height - 200);
-			scores.push(new TempScore("+70", character.position.x));
+      text("+70", character.position.x + 50, height - 200);
     }
 
     // fish
@@ -499,8 +499,6 @@ function draw() {
       // if (remainingTime > collidedTime - 10) {
       //   text("+50", character.position.x + 50, height - 200);
       // }
-
-			scores.push(new TempScore("+50", character.position.x));
     }
 
     // game character
@@ -534,6 +532,7 @@ function draw() {
 }
 
 function keyPressed() {
+  console.log(keyCode);
   if (keyCode === ENTER) {
     if (!gameStart) {
       if (howTo) {
@@ -588,32 +587,4 @@ function timeIncrease(currTime) {
 
 function collect(collector, collected) {
   collected.remove();
-}
-
-class TempScore {
-	constructor(scoreAmount, x) {
-		this.amount = scoreAmount;
-		this.position = createVector(x + 50, height - 200);
-		this.lifespan = 100;
-	}
-
-	update() {
-		this.lifespan -= 2;
-	}
-
-	display() {
-		if (!this.isDead()) {
-			textFont(font, 24);
-			text(this.amount, this.position.x, this.position.y);
-		}
-	}
-
-	isDead() {
-		if (this.lifespan < 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 }
