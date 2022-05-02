@@ -32,23 +32,23 @@ let survivingTime = 0;
 let playAgain;
 
 function preload() {
-  font = loadFont('font0.otf');
+  font = loadFont('data/font0.otf');
 
-  char_img = loadImage('character.png');
-  char2_img = loadImage('character_2.png');
-  char3_img = loadImage('character_3.png');
-  char4_img = loadImage('character_4.png');
-  char5_img = loadImage('character_5.png');
-  char6_img = loadImage('character_6.png');
+  char_img = loadImage('data/character.png');
+  char2_img = loadImage('data/character_2.png');
+  char3_img = loadImage('data/character_3.png');
+  char4_img = loadImage('data/character_4.png');
+  char5_img = loadImage('data/character_5.png');
+  char6_img = loadImage('data/character_6.png');
 
-  ball_img = loadImage('ball.png');
-  can_img = loadImage('can.png');
-  wool_img = loadImage('wool.png');
-  chicken_img = loadImage('chicken.png');
-  fish_img = loadImage('fish.png');
+  ball_img = loadImage('data/ball.png');
+  can_img = loadImage('data/can.png');
+  wool_img = loadImage('data/wool.png');
+  chicken_img = loadImage('data/chicken.png');
+  fish_img = loadImage('data/fish.png');
 
-  rock1_img = loadImage('rock1.png');
-  rock2_img = loadImage('rock2.png');
+  rock1_img = loadImage('data/rock1.png');
+  rock2_img = loadImage('data/rock2.png');
 }
 
 function setup() {
