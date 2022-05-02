@@ -83,7 +83,7 @@ function draw() {
   if (howTo) {
     textAlign(CENTER);
     textFont(font, 32);
-    text(chooseCharText, width / 2, (height - 200) / 2 - 200);
+    text(chooseCharText, width / 2, (height - 200) / 2 - 190);
     textFont(font, 24);
 
     text("Use arrow keys to move your character", width / 2, (height - 200) / 2 - 120);
@@ -104,14 +104,14 @@ function draw() {
     image(can_img, width / 2 - 238, (height - 200) / 2 + 250);
     text(": 100", width / 2 - 150, (height - 200) / 2 + 283);
 
-    image(wool_img, width / 2 + 120, (height - 200) / 2 + 35);
-    text(": 200", width / 2 + 200, (height - 200) / 2 + 58)
+    image(wool_img, width / 2 + 120, (height - 200) / 2 + 70);
+    text(": 200", width / 2 + 200, (height - 200) / 2 + 93)
 
-    image(rock1_img, width / 2 + 95, (height - 200) / 2 + 95);
-    text(": -200", width / 2 + 200, (height - 200) / 2 + 133);
+    image(rock1_img, width / 2 + 95, (height - 200) / 2 + 130);
+    text(": -200", width / 2 + 200, (height - 200) / 2 + 168);
 
-    image(rock2_img, width / 2 + 110, (height - 200) / 2 + 170);
-    text(": -100", width / 2 + 200, (height - 200) / 2 + 203);
+    image(rock2_img, width / 2 + 110, (height - 200) / 2 + 205);
+    text(": -100", width / 2 + 200, (height - 200) / 2 + 238);
 
     // chooseChar();
   }
@@ -119,26 +119,22 @@ function draw() {
   else if (!gameStart && chooseChar) {
     textAlign(CENTER);
     textFont(font, 24);
-    text("Choose your character by pressing:", width / 2, (height - 200) / 2 - 200);
+    text("Choose your character by pressing:", width / 2, (height - 200) / 2 - 150);
 
     textAlign(LEFT);
     textFont(font, 24);
-    text("1:", width / 2 - 300, (height - 200) / 2 - 120);
-    image(char_img, width / 2 - 240, (height - 200) / 2 - 160);
-    text("2:", width / 2 - 65, (height - 200) / 2 - 120);
-    image(char2_img, width / 2, (height - 200) / 2 - 160);
-    text("3:", width / 2 + 170, (height - 200) / 2 - 120);
-    image(char3_img, width / 2 + 230, (height - 200) / 2 - 110);
-    text("4:", width / 2 - 300, (height - 200) / 2 + 110);
-    image(char4_img, width / 2 - 240, (height - 200) / 2 + 90);
-    text("5:", width / 2 - 65, (height - 200) / 2 + 110);
-    image(char5_img, width / 2 + 5, (height - 200) / 2 + 100);
-    text("6:", width / 2 + 170, (height - 200) / 2 + 110);
-    image(char6_img, width / 2 + 225, (height - 200) / 2 + 115);
-
-    textAlign(CENTER);
-    textFont(font, 24);
-    text("After choosing your character, press ENTER to start", width / 2, (height - 200) / 2 + 325);
+    text("1:", width / 2 - 345, (height - 200) / 2 - 70);
+    image(char_img, width / 2 - 285, (height - 200) / 2 - 110);
+    text("2:", width / 2 - 110, (height - 200) / 2 - 70);
+    image(char2_img, width / 2 - 45, (height - 200) / 2 - 110);
+    text("3:", width / 2 + 125, (height - 200) / 2 - 70);
+    image(char3_img, width / 2 + 195, (height - 200) / 2 - 60);
+    text("4:", width / 2 - 345, (height - 200) / 2 + 160);
+    image(char4_img, width / 2 - 285, (height - 200) / 2 + 140);
+    text("5:", width / 2 - 110, (height - 200) / 2 + 160);
+    image(char5_img, width / 2 - 40, (height - 200) / 2 + 150);
+    text("6:", width / 2 + 125, (height - 200) / 2 + 160);
+    image(char6_img, width / 2 + 180, (height - 200) / 2 + 165);
 
     if (keyWentDown('1')) {
       charIndex = 0;
@@ -234,9 +230,9 @@ function draw() {
     chooseChar = false;
 
     textAlign(LEFT);
-    textFont(font, 18);
+    textFont(font, 24);
     text("Time: " + remainingTime, 20, 40);
-    text("Score: " + score, 20, 70);
+    text("Score: " + score, 20, 80);
 
     // ball
     if (random(1) < 0.009) {
@@ -257,7 +253,7 @@ function draw() {
     if (character.collide(balls)) {
       character.overlap(balls, collect);
       score += 30;
-      text("+30", character.position.x + 50, character.position.y - 70);
+      text("+30", character.position.x + 50, height - 200);
     }
 
     // can
@@ -278,7 +274,7 @@ function draw() {
     if (character.collide(cans)) {
       character.overlap(cans, collect);
       score += 100;
-      text("+100", character.position.x + 50, character.position.y - 70);
+      text("+100", character.position.x + 50, height - 200);
     }
 
     // wool
@@ -299,7 +295,7 @@ function draw() {
     if (character.collide(wools)) {
       character.overlap(wools, collect);
       score += 200;
-      text("+200", character.position.x + 50, character.position.y - 70);
+      text("+200", character.position.x + 50, height - 200);
     }
 
     // chicken
@@ -320,7 +316,7 @@ function draw() {
     if (character.collide(chickens)) {
       character.overlap(chickens, collect);
       score += 70;
-      text("+70", character.position.x + 50, character.position.y - 70);
+      text("+70", character.position.x + 50, height - 200);
     }
 
     // fish
@@ -341,7 +337,7 @@ function draw() {
     if (character.collide(fish)) {
       character.overlap(fish, collect);
       score += 50;
-      text("+50", character.position.x + 50, character.position.y - 70);
+      text("+50", character.position.x + 50, height - 200);
     }
 
     // rock1
@@ -362,7 +358,7 @@ function draw() {
     if (character.collide(rocks1)) {
       character.overlap(rocks1, collect);
       score -= 200;
-      text("-200", character.position.x + 50, character.position.y - 70);
+      text("-200", character.position.x + 50, height - 200);
     }
 
     // rock2
@@ -383,7 +379,7 @@ function draw() {
     if (character.collide(rocks2)) {
       character.overlap(rocks2, collect);
       score -= 100;
-      text("-100", character.position.x + 50, character.position.y - 70);
+      text("-100", character.position.x + 50, height - 200);
     }
 
     // game character
