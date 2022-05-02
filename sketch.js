@@ -4,7 +4,7 @@
 
 let character;
 let charIndex;
-let charHeight = [168, 140, 130, 143, 143, 130];
+let charHeight = [168, 140, 130, 143, 143, 135];
 
 let ball_img, can_img, wool_img, chicken_img, fish_img, rock1_img, rock2_img;
 
@@ -20,8 +20,11 @@ let howTo = false;
 let chooseChar = false;
 
 let score = 0;
-// let remainingTime = 60;
-let remainingTime = 10;
+let remainingTime = 60;
+// let remainingTime = 10;
+
+let duration = 10000;   // score appears for 3 seconds
+let currTime;
 
 let gameOverText;
 let playAgain;
@@ -131,7 +134,7 @@ function draw() {
     text("5:", width / 2 - 65, (height - 200) / 2 + 110);
     image(char5_img, width / 2 + 5, (height - 200) / 2 + 100);
     text("6:", width / 2 + 170, (height - 200) / 2 + 110);
-    image(char6_img, width / 2 + 240, (height - 200) / 2 + 115);
+    image(char6_img, width / 2 + 225, (height - 200) / 2 + 115);
 
     textAlign(CENTER);
     textFont(font, 24);
@@ -141,31 +144,58 @@ function draw() {
       charIndex = 0;
       character = createSprite(width / 2, height - charHeight[charIndex], 100, 213);
       character.addImage(char_img);
+
+      chooseChar = false;
+      gameStart = true;
+      gameOver = false;
     }
+
     else if (keyWentDown('2')) {
       charIndex = 1;
       character = createSprite(width / 2, height - charHeight[charIndex], 100, 216);
       character.addImage(char2_img);
+
+      chooseChar = false;
+      gameStart = true;
+      gameOver = false;
     }
+
     else if (keyWentDown('3')) {
       charIndex = 2;
       character = createSprite(width / 2, height - charHeight[charIndex], 100, 87);
       character.addImage(char3_img);
+
+      chooseChar = false;
+      gameStart = true;
+      gameOver = false;
     }
+
     else if (keyWentDown('4')) {
       charIndex = 3;
       character = createSprite(width / 2, height - charHeight[charIndex], 100, 167);
       character.addImage(char4_img);
+
+      chooseChar = false;
+      gameStart = true;
+      gameOver = false;
     }
     else if (keyWentDown('5')) {
       charIndex = 4;
       character = createSprite(width / 2, height - charHeight[charIndex], 100, 143);
       character.addImage(char5_img);
+
+      chooseChar = false;
+      gameStart = true;
+      gameOver = false;
     }
     else if (keyWentDown('6')) {
       charIndex = 5;
-      character = createSprite(width / 2, height - charHeight[charIndex], 100, 80);
+      character = createSprite(width / 2, height - charHeight[charIndex], 120, 96);
       character.addImage(char6_img);
+
+      chooseChar = false;
+      gameStart = true;
+      gameOver = false;
     }
   }
 
@@ -195,7 +225,7 @@ function draw() {
     textFont(font, 24);
     text(playAgain, width / 2, (height - 200) / 2 + 100);
     text(howToText, width / 2, (height - 200) / 2 + 150);
-    remainingTime = 10;
+    remainingTime = 60;
 
     // chooseChar();
   }
@@ -223,9 +253,11 @@ function draw() {
       }
     }
 
+    textFont(font, 24);
     if (character.collide(balls)) {
       character.overlap(balls, collect);
       score += 30;
+      text("+30", character.position.x + 50, character.position.y - 70);
     }
 
     // can
@@ -246,6 +278,7 @@ function draw() {
     if (character.collide(cans)) {
       character.overlap(cans, collect);
       score += 100;
+      text("+100", character.position.x + 50, character.position.y - 70);
     }
 
     // wool
@@ -266,6 +299,7 @@ function draw() {
     if (character.collide(wools)) {
       character.overlap(wools, collect);
       score += 200;
+      text("+200", character.position.x + 50, character.position.y - 70);
     }
 
     // chicken
@@ -286,6 +320,7 @@ function draw() {
     if (character.collide(chickens)) {
       character.overlap(chickens, collect);
       score += 70;
+      text("+70", character.position.x + 50, character.position.y - 70);
     }
 
     // fish
@@ -306,6 +341,7 @@ function draw() {
     if (character.collide(fish)) {
       character.overlap(fish, collect);
       score += 50;
+      text("+50", character.position.x + 50, character.position.y - 70);
     }
 
     // rock1
@@ -326,6 +362,7 @@ function draw() {
     if (character.collide(rocks1)) {
       character.overlap(rocks1, collect);
       score -= 200;
+      text("-200", character.position.x + 50, character.position.y - 70);
     }
 
     // rock2
@@ -346,6 +383,7 @@ function draw() {
     if (character.collide(rocks2)) {
       character.overlap(rocks2, collect);
       score -= 100;
+      text("-100", character.position.x + 50, character.position.y - 70);
     }
 
     // game character
@@ -393,11 +431,11 @@ function keyPressed() {
       if (!chooseChar) {
         chooseChar = true;
       }
-      else if (chooseChar) {
-        chooseChar = false;
-        gameStart = true;
-        gameOver = false;
-      }
+      // else if (chooseChar) {
+      //   chooseChar = false;
+      //   gameStart = true;
+      //   gameOver = false;
+      // }
     }
 
     else if (gameOver) {
@@ -412,7 +450,7 @@ function keyPressed() {
       gameStart = false;
 
       score = 0;
-      remainingTime = 10;
+      remainingTime = 60;
 
       // move the character to its initial position
       character.position.x = width / 2;
