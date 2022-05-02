@@ -75,6 +75,7 @@ function setup() {
 }
 
 function draw() {
+  console.log(survivingTime);
   // background
   noStroke();
   fill(135, 206, 235);
@@ -166,6 +167,8 @@ function draw() {
       chooseChar = false;
       gameStart = true;
       gameOver = false;
+
+      currTime = millis();
     }
 
     else if (keyWentDown('2')) {
@@ -176,6 +179,8 @@ function draw() {
       chooseChar = false;
       gameStart = true;
       gameOver = false;
+
+      currTime = millis();
     }
 
     else if (keyWentDown('3')) {
@@ -186,6 +191,8 @@ function draw() {
       chooseChar = false;
       gameStart = true;
       gameOver = false;
+
+      currTime = millis();
     }
 
     else if (keyWentDown('4')) {
@@ -196,7 +203,10 @@ function draw() {
       chooseChar = false;
       gameStart = true;
       gameOver = false;
+
+      currTime = millis();
     }
+
     else if (keyWentDown('5')) {
       charIndex = 4;
       character = createSprite(width / 2, height - charHeight[charIndex], 100, 143);
@@ -205,6 +215,8 @@ function draw() {
       chooseChar = false;
       gameStart = true;
       gameOver = false;
+
+      currTime = millis();
     }
     else if (keyWentDown('6')) {
       charIndex = 5;
@@ -214,6 +226,8 @@ function draw() {
       chooseChar = false;
       gameStart = true;
       gameOver = false;
+
+      currTime = millis();
     }
   }
 
@@ -322,7 +336,7 @@ function draw() {
     }
 
     else if (gameMode === 2) {  // surviving
-      timeIncrease();
+      timeIncrease(currTime);
 
       textAlign(LEFT);
       textFont(font, 24);
@@ -554,9 +568,9 @@ function timeDecrease() {
   }
 }
 
-function timeIncrease() {
-  if (gameStart) {
-    if (int(millis() / 1000) != survivingTime) {
+function timeIncrease(currTime) {
+  if (gameStart && !gameOver) {
+    if (int((millis() - currTime) / 1000) != survivingTime) {
       survivingTime++;
     }
   }
