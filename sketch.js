@@ -11,22 +11,25 @@ let ball_img, can_img, wool_img, chicken_img, fish_img, rock1_img, rock2_img;
 let balls, cans, wools, chickens, fishGroup, rocks1, rocks2;
 
 let font
-let startGameText;
 let howToText;
+let gameOverText;
+let startGameText;
 
 let gameStart = false;
 let gameOver = false;
 let howTo = false;
+let chooseMode = false;
 let chooseChar = false;
+
+let gameMode = 0;
 
 let score = 0;
 let remainingTime = 60;
-// let remainingTime = 10;
+let survivingTime = 0;
 
-let duration = 10000;   // score appears for 3 seconds
-let currTime;
+// let duration = 10000;   // score appears for 3 seconds
+// let currTime;
 
-let gameOverText;
 let playAgain;
 
 function preload() {
@@ -53,8 +56,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(255);
 
-  startGameText = "Press ENTER to start the game!";
-  chooseCharText = "Press ENTER to choose a characer";
+  startGameText = "Press ENTER to start game";
   howToText = "Press M key to learn how to play";
 
   gameOverText = "GAME OVER";
@@ -83,7 +85,7 @@ function draw() {
   if (howTo) {
     textAlign(CENTER);
     textFont(font, 32);
-    text(chooseCharText, width / 2, (height - 200) / 2 - 190);
+    text(startGameText, width / 2, (height - 200) / 2 - 190);
     textFont(font, 24);
 
     text("Use arrow keys to move your character", width / 2, (height - 200) / 2 - 120);
@@ -116,13 +118,33 @@ function draw() {
     // chooseChar();
   }
 
+  else if (!gameStart && chooseMode) {
+    textAlign(CENTER);
+    textFont(font, 24);
+    text("Choose a game mode by pressing:", width / 2, (height - 200) / 2 - 150);
+
+    textAlign(LEFT);
+    text("1: Gain a higher score in 60 seconds", width / 2 - 345, (height - 200) / 2 - 70);
+    text("2: Survive for a longer time, avoiding rocks", width / 2 - 345, (height - 200) / 2);
+
+    if (keyWentDown('1')) {
+      gameMode = 1;
+      chooseMode = false;
+      chooseChar = true;
+    }
+    else if (keyWentDown('2')) {
+      gameMode = 2;
+      chooseMode = false;
+      chooseChar = true;
+    }
+  }
+
   else if (!gameStart && chooseChar) {
     textAlign(CENTER);
     textFont(font, 24);
     text("Choose your character by pressing:", width / 2, (height - 200) / 2 - 150);
 
     textAlign(LEFT);
-    textFont(font, 24);
     text("1:", width / 2 - 345, (height - 200) / 2 - 70);
     image(char_img, width / 2 - 285, (height - 200) / 2 - 110);
     text("2:", width / 2 - 110, (height - 200) / 2 - 70);
@@ -200,7 +222,7 @@ function draw() {
     // START GAME
     textFont(font, 32);
     // text(startGame, width / 2 - 330, 200);
-    text(chooseCharText, width / 2, (height - 200) / 2);
+    text(startGameText, width / 2, (height - 200) / 2);
 
     // use arrow keys...
     textFont(font, 24);
@@ -211,17 +233,33 @@ function draw() {
   }
 
   else if (gameOver) {
-    textAlign(CENTER);
-    textFont(font, 48);
-    text(gameOverText, width / 2, (height - 200) / 2 - 50);
+    if (gameMode === 1) {
+      textAlign(CENTER);
+      textFont(font, 48);
+      text(gameOverText, width / 2, (height - 200) / 2 - 50);
 
-    textFont(font, 32);
-    text("Score: " + score, width / 2, (height - 200) / 2);
+      textFont(font, 32);
+      text("Score: " + score, width / 2, (height - 200) / 2 + 25);
 
-    textFont(font, 24);
-    text(playAgain, width / 2, (height - 200) / 2 + 100);
-    text(howToText, width / 2, (height - 200) / 2 + 150);
-    remainingTime = 60;
+      textFont(font, 24);
+      text(playAgain, width / 2, (height - 200) / 2 + 100);
+      text(howToText, width / 2, (height - 200) / 2 + 150);
+      remainingTime = 60;
+    }
+
+    else if (gameMode === 2) {
+      textAlign(CENTER);
+      textFont(font, 48);
+      text(gameOverText, width / 2, (height - 200) / 2 - 70);
+
+      textFont(font, 32);
+      text("Score: " + score, width / 2, (height - 200) / 2);
+      text("Survived Time: " + survivingTime, width / 2, (height - 200) / 2 + 50);
+
+      textFont(font, 24);
+      text(playAgain, width / 2, (height - 200) / 2 + 120);
+      text(howToText, width / 2, (height - 200) / 2 + 170);
+    }
 
     // chooseChar();
   }
@@ -229,10 +267,110 @@ function draw() {
   else {
     chooseChar = false;
 
-    textAlign(LEFT);
-    textFont(font, 24);
-    text("Time: " + remainingTime, 20, 40);
-    text("Score: " + score, 20, 80);
+    if (gameMode === 1) {  // high score
+      textAlign(LEFT);
+      textFont(font, 24);
+      text("Time: " + remainingTime, 20, 40);
+      text("Score: " + score, 20, 80);
+
+      // rock1
+      if (random(1) < 0.005) {
+        let newRock1 = createSprite(random(0, width), 20, 80, 59);
+        newRock1.addImage(rock1_img);
+        newRock1.addToGroup(rocks1);
+      }
+
+      for (let i = 0; i < rocks1.length; i++) {
+        let aRock1 = rocks1[i];
+        aRock1.position.y += 7;
+        if (aRock1.position.y > height - 120) {
+          aRock1.remove();
+        }
+      }
+
+      if (character.collide(rocks1)) {
+        character.overlap(rocks1, collect);
+        score -= 200;
+        text("-200", character.position.x + 50, height - 200);
+      }
+
+      // rock2
+      if (random(1) < 0.007) {
+        let newRock2 = createSprite(random(0, width), 20, 60, 52);
+        newRock2.addImage(rock2_img);
+        newRock2.addToGroup(rocks2);
+      }
+
+      for (let i = 0; i < rocks2.length; i++) {
+        let aRock2 = rocks2[i];
+        aRock2.position.y += 4;
+        if (aRock2.position.y > height - 120) {
+          aRock2.remove();
+        }
+      }
+
+      if (character.collide(rocks2)) {
+        character.overlap(rocks2, collect);
+        score -= 100;
+        text("-100", character.position.x + 50, height - 200);
+      }
+
+      if (remainingTime == 0) {
+        gameOver = true;
+        allSprites.removeSprites();
+      }
+    }
+
+    else if (gameMode === 2) {  // surviving
+      timeIncrease();
+
+      textAlign(LEFT);
+      textFont(font, 24);
+      text("Time: " + survivingTime, 20, 40);
+      text("Score: " + score, 20, 80);
+
+      // rock1
+      if (random(1) < 0.005) {
+        let newRock1 = createSprite(random(0, width), 20, 80, 59);
+        newRock1.addImage(rock1_img);
+        newRock1.addToGroup(rocks1);
+      }
+
+      for (let i = 0; i < rocks1.length; i++) {
+        let aRock1 = rocks1[i];
+        aRock1.position.y += 7;
+        if (aRock1.position.y > height - 120) {
+          aRock1.remove();
+        }
+      }
+
+      if (character.collide(rocks1)) {
+        character.overlap(rocks1, collect);
+        gameOver = true;
+        allSprites.removeSprites();
+      }
+
+      // rock2
+      if (random(1) < 0.007) {
+        let newRock2 = createSprite(random(0, width), 20, 60, 52);
+        newRock2.addImage(rock2_img);
+        newRock2.addToGroup(rocks2);
+      }
+
+      for (let i = 0; i < rocks2.length; i++) {
+        let aRock2 = rocks2[i];
+        aRock2.position.y += 4;
+        if (aRock2.position.y > height - 120) {
+          aRock2.remove();
+        }
+      }
+
+      if (character.collide(rocks2)) {
+        character.overlap(rocks2, collect);
+        gameOver = true;
+        allSprites.removeSprites();
+      }
+    }
 
     // ball
     if (random(1) < 0.009) {
@@ -340,48 +478,6 @@ function draw() {
       text("+50", character.position.x + 50, height - 200);
     }
 
-    // rock1
-    if (random(1) < 0.005) {
-      let newRock1 = createSprite(random(0, width), 20, 80, 59);
-      newRock1.addImage(rock1_img);
-      newRock1.addToGroup(rocks1);
-    }
-
-    for (let i = 0; i < rocks1.length; i++) {
-      let aRock1 = rocks1[i];
-      aRock1.position.y += 7;
-      if (aRock1.position.y > height - 120) {
-        aRock1.remove();
-      }
-    }
-
-    if (character.collide(rocks1)) {
-      character.overlap(rocks1, collect);
-      score -= 200;
-      text("-200", character.position.x + 50, height - 200);
-    }
-
-    // rock2
-    if (random(1) < 0.007) {
-      let newRock2 = createSprite(random(0, width), 20, 60, 52);
-      newRock2.addImage(rock2_img);
-      newRock2.addToGroup(rocks2);
-    }
-
-    for (let i = 0; i < rocks2.length; i++) {
-      let aRock2 = rocks2[i];
-      aRock2.position.y += 4;
-      if (aRock2.position.y > height - 120) {
-        aRock2.remove();
-      }
-    }
-
-    if (character.collide(rocks2)) {
-      character.overlap(rocks2, collect);
-      score -= 100;
-      text("-100", character.position.x + 50, height - 200);
-    }
-
     // game character
     if (keyDown(LEFT_ARROW)) {
       character.mirrorX(-1);
@@ -402,17 +498,13 @@ function draw() {
         character.velocity.x = 0;
       }
     }
+
     else {
       character.velocity.x = 0;
     }
 
     character.position.y = height - charHeight[charIndex];
     drawSprites();
-  }
-
-  if (remainingTime == 0) {
-    gameOver = true;
-    allSprites.removeSprites();
   }
 }
 
@@ -424,14 +516,9 @@ function keyPressed() {
         howTo = false;
       }
 
-      if (!chooseChar) {
-        chooseChar = true;
+      if (!chooseMode && !chooseChar) {
+        chooseMode = true;
       }
-      // else if (chooseChar) {
-      //   chooseChar = false;
-      //   gameStart = true;
-      //   gameOver = false;
-      // }
     }
 
     else if (gameOver) {
@@ -439,14 +526,15 @@ function keyPressed() {
         howTo = false;
       }
 
-      if (!chooseChar) {
-        chooseChar = true;
+      if (!chooseMode && !chooseChar) {
+        chooseMode = true;
       }
-      gameOver = false;
+
       gameStart = false;
 
       score = 0;
       remainingTime = 60;
+      survivingTime = 0;
 
       // move the character to its initial position
       character.position.x = width / 2;
@@ -466,92 +554,14 @@ function timeDecrease() {
   }
 }
 
+function timeIncrease() {
+  if (gameStart) {
+    if (int(millis() / 1000) != survivingTime) {
+      survivingTime++;
+    }
+  }
+}
+
 function collect(collector, collected) {
   collected.remove();
 }
-
-// // https://p5js.org/examples/interaction-snake-game.html
-// class Jewelry {
-//   constructor() {
-//     this.x = random(20, width - 20);
-//     this.y = 20;
-//     this.colorIndex = int(random(0, 4));
-//     this.yvelocity = this.colorIndex + 2;
-//     this.touchGround = false;
-//     this.opacity = 100;
-//   }
-//
-//   update() {
-//     this.y += this.yvelocity;
-//     if (this.y > height - 70) {
-//       this.touchGround = true;
-//       this.yvelocity = 0;
-//     }
-//   }
-//
-//   display() {
-//     if (this.touchGround == false) {
-//       fill(colorArray[this.colorIndex]);
-//     }
-//
-//     else if (this.touchGround == true) {
-//       while (this.opacity > 0) {
-//         this.opacity -= 10;
-//       }
-//
-//       if (this.colorIndex == 0) {
-//         fill(0, this.opacity);
-//
-//       }
-//       else if (this.colorIndex == 1) {
-//         fill(255, this.opacity);
-//       }
-//       else if (this.colorIndex == 2) {
-//         fill(255, 0, 0, this.opacity);
-//       }
-//       else {
-//         fill(0, 0, 255, this.opacity);
-//       }
-//
-//       // this.opacity = 0;
-//
-//       // for (let i = 0; i < 4; i++) {
-//       //   opacity -= 30;
-//       // }
-//     }
-//
-//     noStroke();
-//     circle(this.x, this.y, 50);
-//   }
-// }
-//
-// class Rock {
-//   constructor() {
-//     this.x = random(20, width - 20);
-//     this.y = 20;
-//     this.velocity = 4;
-//     this.touchGround = false;
-//   }
-//
-//   update() {
-//     this.y += this.velocity;
-//     if (this.y > height - 70) {
-//       this.touchGround = true;
-//       this.velocity = 0;
-//     }
-//   }
-//
-//   display() {
-//     if (this.touchGround == false) {
-//       fill(127);
-//     }
-//
-//     // else if (this.touchGround == true) {
-//     else {
-//       fill(127, 0);
-//     }
-//
-//     noStroke();
-//     triangle(this.x, this.y, this.x - 20, this.y + 40, this.x + 20, this.y + 40);
-//   }
-// }
