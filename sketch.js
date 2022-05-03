@@ -31,10 +31,13 @@ let score = 0;
 let scores = [];
 let remainingTime = 60;
 let survivingTime = 0;
+let moreRockTime;
 
 let spellTime = 300;
+let rockTime = 100;
 let slowDown = false;
 let freeze = false;
+let moreRock = false;
 
 let rate1 = 0.005;
 let rate2 = 0.007;
@@ -73,7 +76,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth - 20, windowHeight);
   background(255);
 
   startGameText = "Press ENTER to start game";
@@ -84,6 +87,7 @@ function setup() {
 
   // https://editor.p5js.org/denaplesk2/sketches/ryIBFP_lG
   setInterval(timeDecrease, 1000);
+  setInterval(rockTimeDec, 1000);
 
   balls = new Group();
   cans = new Group();
@@ -159,11 +163,13 @@ function draw() {
     }
     else if (keyWentDown('2')) {
       gameMode = 2;
+      moreRockTime = 20;
       chooseMode = false;
       chooseChar = true;
     }
     else if (keyWentDown('3')) {
       gameMode = 3;
+      moreRockTime = 15;
       chooseMode = false;
       chooseChar = true;
     }
@@ -310,18 +316,22 @@ function draw() {
 			aScore.display();
 		}
 
+    textAlign(CENTER);
+    textFont(font, 32);
+
     if (freeze) {
-      textAlign(CENTER);
-      textFont(font, 32);
       text("FREEZE!", width - 150, height / 2);
     }
 
     if (slowDown) {
-      textAlign(CENTER);
-      textFont(font, 32);
-      text("SLOW", width - 155, (height - 200) / 2 - 25);
+      text("SLOW", width - 148, (height - 200) / 2 - 25);
       text("DOWN!", width - 150, (height - 200) / 2 + 25);
     }
+
+    // if (moreRock) {
+    //   text("MORE", width - 130, (height - 200) / 2 - 25);
+    //   text("ROCK!", width - 150, (height - 200) / 2 + 25);
+    // }
 
     if (gameMode === 1) {  // high score
       textAlign(LEFT);
@@ -391,6 +401,14 @@ function draw() {
         }
       }
 
+      // if (moreRock) {
+      //   rockTime -= 2;
+      //   if (rockTime < 0) {
+      //     moreRock = false;
+      //     rockTime = 200;
+      //   }
+      // }
+
       if (remainingTime == 0) {
         gameOver = true;
         allSprites.removeSprites();
@@ -398,32 +416,47 @@ function draw() {
     }
 
     else if ((gameMode === 2) || (gameMode === 3)) {
+      textAlign(LEFT);
+      textFont(font, 24);
+
       if (gameMode === 2) {
-        textAlign(LEFT);
-        textFont(font, 24);
         text("Score: " + score, 20, 40);
       }
 
       else if (gameMode === 3) {
-        textAlign(LEFT);
-        textFont(font, 24);
         text("Time: " + survivingTime, 20, 40);
       }
+
+      text("Until More Rocks: " + moreRockTime, 20, 80);
 
       timeIncrease(currTime);
 
       // rock1
       if (gameMode === 2) {
         if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
+        // if (moreRockTime === 0) {
           rate1 += 0.00005;
           rate2 += 0.00005;
+          // moreRock = true;
+
+          text("MORE", width - 138, (height - 200) / 2 - 25);
+          text("ROCKS!", width - 150, (height - 200) / 2 + 25);
+
+          moreRockTime = 20;
         }
       }
 
       else {
         if ((survivingTime > 0) && (survivingTime % 15 === 0)) {
+        // if (moreRockTime === 0) {
           rate1 += 0.0002;
           rate2 += 0.0002;
+          // moreRock = true;
+
+          text("MORE", width - 138, (height - 200) / 2 - 25);
+          text("ROCKS!", width - 150, (height - 200) / 2 + 25);
+
+          moreRockTime = 15;
         }
       }
 
@@ -679,6 +712,13 @@ function keyPressed() {
 function timeDecrease() {
   if (remainingTime > 0 && gameStart) {
     remainingTime--;
+  }
+}
+
+function rockTimeDec() {
+  if (gameStart) {
+  // if (gameStart && !moreRock) {
+    moreRockTime--;
   }
 }
 
