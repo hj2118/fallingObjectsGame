@@ -1,7 +1,5 @@
 // falling objects
 
-// https://www.youtube.com/watch?v=_H9JIwWP7HQ
-
 let character;
 let charIndex;
 let charHeight = [168, 140, 130, 143, 143, 135];
@@ -24,6 +22,7 @@ let chooseChar = false;
 let gameMode = 0;
 
 let score = 0;
+let scores = [];
 let remainingTime = 60;
 let survivingTime = 0;
 
@@ -62,7 +61,6 @@ function setup() {
   gameOverText = "GAME OVER";
   playAgain = "To play again press ENTER!";
 
-  // https://editor.p5js.org/denaplesk2/sketches/ryIBFP_lG
   setInterval(timeDecrease, 1000);
 
   balls = new Group();
@@ -75,7 +73,6 @@ function setup() {
 }
 
 function draw() {
-  console.log(survivingTime);
   // background
   noStroke();
   fill(135, 206, 235);
@@ -115,8 +112,6 @@ function draw() {
 
     image(rock2_img, width / 2 + 110, (height - 200) / 2 + 205);
     text(": -100", width / 2 + 200, (height - 200) / 2 + 238);
-
-    // chooseChar();
   }
 
   else if (!gameStart && chooseMode) {
@@ -239,17 +234,12 @@ function draw() {
 
   else if (!gameStart) {
     textAlign(CENTER);
-    // START GAME
+
     textFont(font, 32);
-    // text(startGame, width / 2 - 330, 200);
     text(startGameText, width / 2, (height - 200) / 2);
 
-    // use arrow keys...
     textFont(font, 24);
-    // text(howTo, width / 2 - 370, 250);
     text(howToText, width / 2, (height - 200) / 2 + 50);
-
-    // chooseChar();
   }
 
   else if (gameOver) {
@@ -280,12 +270,16 @@ function draw() {
       text(playAgain, width / 2, (height - 200) / 2 + 140);
       text(howToText, width / 2, (height - 200) / 2 + 190);
     }
-
-    // chooseChar();
   }
 
   else {
     chooseChar = false;
+
+		for (let i = 0; i < scores.length; i++) {
+			let aScore = scores[i];
+			aScore.update();
+			aScore.display();
+		}
 
     if (gameMode === 1) {  // high score
       textAlign(LEFT);
@@ -294,7 +288,7 @@ function draw() {
       text("Score: " + score, 20, 80);
 
       // rock1
-      if (random(1) < 0.005) {
+      if (random(1) < 0.006) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
         newRock1.addImage(rock1_img);
         newRock1.addToGroup(rocks1);
@@ -311,11 +305,12 @@ function draw() {
       if (character.collide(rocks1)) {
         character.overlap(rocks1, collect);
         score -= 200;
-        text("-200", character.position.x + 50, height - 200);
+				scores.push(new TempScore("-200", character.position.x));
+        // text("-200", character.position.x + 50, height - 200);
       }
 
       // rock2
-      if (random(1) < 0.007) {
+      if (random(1) < 0.008) {
         let newRock2 = createSprite(random(0, width), 20, 60, 52);
         newRock2.addImage(rock2_img);
         newRock2.addToGroup(rocks2);
@@ -332,7 +327,8 @@ function draw() {
       if (character.collide(rocks2)) {
         character.overlap(rocks2, collect);
         score -= 100;
-        text("-100", character.position.x + 50, height - 200);
+				scores.push(new TempScore("-100", character.position.x));
+        // text("-100", character.position.x + 50, height - 200);
       }
 
       if (remainingTime == 0) {
@@ -350,7 +346,7 @@ function draw() {
       text("Score: " + score, 20, 80);
 
       // rock1
-      if (random(1) < 0.005) {
+      if (random(1) < 0.006) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
         newRock1.addImage(rock1_img);
         newRock1.addToGroup(rocks1);
@@ -371,7 +367,7 @@ function draw() {
       }
 
       // rock2
-      if (random(1) < 0.007) {
+      if (random(1) < 0.008) {
         let newRock2 = createSprite(random(0, width), 20, 60, 52);
         newRock2.addImage(rock2_img);
         newRock2.addToGroup(rocks2);
@@ -411,7 +407,8 @@ function draw() {
     if (character.collide(balls)) {
       character.overlap(balls, collect);
       score += 30;
-      text("+30", character.position.x + 50, height - 200);
+			scores.push(new TempScore("+30", character.position.x));
+      // text("+30", character.position.x + 50, height - 200);
     }
 
     // can
@@ -432,7 +429,8 @@ function draw() {
     if (character.collide(cans)) {
       character.overlap(cans, collect);
       score += 100;
-      text("+100", character.position.x + 50, height - 200);
+			scores.push(new TempScore("+100", character.position.x));
+      // text("+100", character.position.x + 50, height - 200);
     }
 
     // wool
@@ -453,7 +451,8 @@ function draw() {
     if (character.collide(wools)) {
       character.overlap(wools, collect);
       score += 200;
-      text("+200", character.position.x + 50, height - 200);
+      // text("+200", character.position.x + 50, height - 200);
+			scores.push(new TempScore("+200", character.position.x));
     }
 
     // chicken
@@ -474,7 +473,8 @@ function draw() {
     if (character.collide(chickens)) {
       character.overlap(chickens, collect);
       score += 70;
-      text("+70", character.position.x + 50, height - 200);
+      // text("+70", character.position.x + 50, height - 200);
+			scores.push(new TempScore("+70", character.position.x));
     }
 
     // fish
@@ -499,6 +499,8 @@ function draw() {
       // if (remainingTime > collidedTime - 10) {
       //   text("+50", character.position.x + 50, height - 200);
       // }
+
+			scores.push(new TempScore("+50", character.position.x));
     }
 
     // game character
@@ -532,7 +534,6 @@ function draw() {
 }
 
 function keyPressed() {
-  console.log(keyCode);
   if (keyCode === ENTER) {
     if (!gameStart) {
       if (howTo) {
