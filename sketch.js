@@ -141,14 +141,16 @@ function draw() {
   else if (!gameStart && chooseMode) {
     textAlign(CENTER);
     textFont(font, 28);
-    text("Choose a game mode by pressing:", width / 2, (height - 200) / 2 - 45);
+    text("Choose a game mode by pressing:", width / 2, (height - 200) / 2 - 140);
 
     textFont(font, 24);
     textAlign(LEFT);
-    text("1: Gain a higher score in 60 seconds", width / 2 - 345, (height - 200) / 2 + 40);
-    text("You will be debuffed if you collide with a rock", width / 2 - 309, (height - 200) / 2 + 90);
-    text("2: Survive for a longer time, avoiding rocks", width / 2 - 345, (height - 200) / 2 + 150);
-    text("Rocks will fall more often as you survive longer", width / 2 - 309, (height - 200) / 2 + 200);
+    text("1: Gain a higher score in 60 seconds", width / 2 - 345, (height - 200) / 2 - 55);
+    text("You will be debuffed if you collide with a rock", width / 2 - 309, (height - 200) / 2 - 5);
+    text("2: Gain a higher score, avoiding rocks", width / 2 - 345, (height - 200) / 2 + 55);
+    text("Rocks will fall more often as you survive longer", width / 2 - 309, (height - 200) / 2 + 105);
+    text("3: Survive for a longer time, avoiding rocks", width / 2 - 345, (height - 200) / 2 + 165);
+    text("Rocks will fall more often as you survive longer", width / 2 - 309, (height - 200) / 2 + 215);
 
     if (keyWentDown('1')) {
       gameMode = 1;
@@ -157,6 +159,11 @@ function draw() {
     }
     else if (keyWentDown('2')) {
       gameMode = 2;
+      chooseMode = false;
+      chooseChar = true;
+    }
+    else if (keyWentDown('3')) {
+      gameMode = 3;
       chooseMode = false;
       chooseChar = true;
     }
@@ -267,32 +274,22 @@ function draw() {
   }
 
   else if (gameOver) {
-    if (gameMode === 1) {
-      textAlign(CENTER);
-      textFont(font, 48);
-      text(gameOverText, width / 2, (height - 200) / 2 - 50);
+    textAlign(CENTER);
+    textFont(font, 48);
+    text(gameOverText, width / 2, (height - 200) / 2 - 50);
 
-      textFont(font, 32);
+    textFont(font, 24);
+    text(playAgain, width / 2, (height - 200) / 2 + 100);
+    text(howToText, width / 2, (height - 200) / 2 + 150);
+
+    textFont(font, 32);
+    if ((gameMode === 1) || (gameMode === 2)) {
       text("Score: " + score, width / 2, (height - 200) / 2 + 25);
-
-      textFont(font, 24);
-      text(playAgain, width / 2, (height - 200) / 2 + 100);
-      text(howToText, width / 2, (height - 200) / 2 + 150);
       remainingTime = 60;
     }
 
-    else if (gameMode === 2) {
-      textAlign(CENTER);
-      textFont(font, 48);
-      text(gameOverText, width / 2, (height - 200) / 2 - 70);
-
-      textFont(font, 32);
-      text("Score: " + score, width / 2, (height - 200) / 2 + 10);
-      text("Survived Time: " + survivingTime, width / 2, (height - 200) / 2 + 60);
-
-      textFont(font, 24);
-      text(playAgain, width / 2, (height - 200) / 2 + 140);
-      text(howToText, width / 2, (height - 200) / 2 + 190);
+    else if (gameMode === 3) {
+      text("Survived Time: " + survivingTime, width / 2, (height - 200) / 2 + 25);
     }
 
     image(cry_imgs[charIndex][0], width - cry_imgs[charIndex][1], (height - 200) / 2 - cry_imgs[charIndex][2]);
@@ -400,13 +397,20 @@ function draw() {
       }
     }
 
-    else if (gameMode === 2) {  // surviving
-      timeIncrease(currTime);
+    else if ((gameMode === 2) || (gameMode === 3)) {
+      if (gameMode === 2) {
+        textAlign(LEFT);
+        textFont(font, 24);
+        text("Score: " + score, 20, 40);
+      }
 
-      textAlign(LEFT);
-      textFont(font, 24);
-      text("Time: " + survivingTime, 20, 40);
-      text("Score: " + score, 20, 80);
+      else if (gameMode === 3) {
+        textAlign(LEFT);
+        textFont(font, 24);
+        text("Time: " + survivingTime, 20, 40);
+      }
+
+      timeIncrease(currTime);
 
       // rock1
       if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
@@ -459,117 +463,119 @@ function draw() {
       }
     }
 
-    // ball
-    if (random(1) < 0.009) {
-      let newBall = createSprite(random(0, width), 20, 50, 50);
-      newBall.addImage(ball_img);
-      newBall.addToGroup(balls);
-    }
-
-    for (let i = 0; i < balls.length; i++) {
-      let aBall = balls[i];
-
-      aBall.position.y += 2;
-
-      if (aBall.position.y > height - 120) {
-        aBall.remove();
+    if (gameMode != 3) {
+      // ball
+      if (random(1) < 0.009) {
+        let newBall = createSprite(random(0, width), 20, 50, 50);
+        newBall.addImage(ball_img);
+        newBall.addToGroup(balls);
       }
-    }
 
-    textFont(font, 24);
-    if (character.collide(balls)) {
-      character.overlap(balls, collect);
-      score += 30;
-      scores.push(new TempScore("+30", character.position.x));
-      // text("+30", character.position.x + 50, height - 200);
-    }
+      for (let i = 0; i < balls.length; i++) {
+        let aBall = balls[i];
 
-    // can
-    if (random(1) < 0.004) {
-      let newCan = createSprite(random(0, width), 20, 50, 48);
-      newCan.addImage(can_img);
-      newCan.addToGroup(cans);
-    }
+        aBall.position.y += 2;
 
-    for (let i = 0; i < cans.length; i++) {
-      let aCan = cans[i];
-      aCan.position.y += 6;
-      if (aCan.position.y > height - 120) {
-        aCan.remove();
+        if (aBall.position.y > height - 120) {
+          aBall.remove();
+        }
       }
-    }
 
-    if (character.collide(cans)) {
-      character.overlap(cans, collect);
-      score += 100;
-      scores.push(new TempScore("+100", character.position.x));
-      // text("+100", character.position.x + 50, height - 200);
-    }
-
-    // wool
-    if (random(1) < 0.002) {
-      let newWool = createSprite(random(0, width), 20, 40, 38);
-      newWool.addImage(wool_img);
-      newWool.addToGroup(wools);
-    }
-
-    for (let i = 0; i < wools.length; i++) {
-      let aWool = wools[i];
-      aWool.position.y += 9;
-      if (aWool.position.y > height - 120) {
-        aWool.remove();
+      textFont(font, 24);
+      if (character.collide(balls)) {
+        character.overlap(balls, collect);
+        score += 30;
+        scores.push(new TempScore("+30", character.position.x));
+        // text("+30", character.position.x + 50, height - 200);
       }
-    }
 
-    if (character.collide(wools)) {
-      character.overlap(wools, collect);
-      score += 200;
-      scores.push(new TempScore("+200", character.position.x));
-      // text("+200", character.position.x + 50, height - 200);
-    }
-
-    // chicken
-    if (random(1) < 0.006) {
-      let newChicken = createSprite(random(0, width), 20, 70, 70);
-      newChicken.addImage(chicken_img);
-      newChicken.addToGroup(chickens);
-    }
-
-    for (let i = 0; i < chickens.length; i++) {
-      let aChicken = chickens[i];
-      aChicken.position.y += 4;
-      if (aChicken.position.y > height - 120) {
-        aChicken.remove();
+      // can
+      if (random(1) < 0.004) {
+        let newCan = createSprite(random(0, width), 20, 50, 48);
+        newCan.addImage(can_img);
+        newCan.addToGroup(cans);
       }
-    }
 
-    if (character.collide(chickens)) {
-      character.overlap(chickens, collect);
-      score += 70;
-      scores.push(new TempScore("+70", character.position.x));
-      // text("+70", character.position.x + 50, height - 200);
-    }
-
-    // fish
-    if (random(1) < 0.008) {
-      let newFish = createSprite(random(0, width), 20, 80, 40);
-      newFish.addImage(fish_img);
-      newFish.addToGroup(fish);
-    }
-
-    for (let i = 0; i < fish.length; i++) {
-      let aFish = fish[i];
-      aFish.position.y += 3;
-      if (aFish.position.y > height - 120) {
-        aFish.remove();
+      for (let i = 0; i < cans.length; i++) {
+        let aCan = cans[i];
+        aCan.position.y += 6;
+        if (aCan.position.y > height - 120) {
+          aCan.remove();
+        }
       }
-    }
 
-    if (character.collide(fish)) {
-      let collidedTime = remainingTime;
-      character.overlap(fish, collect);
-      score += 50;
-      scores.push(new TempScore("+50", character.position.x));
+      if (character.collide(cans)) {
+        character.overlap(cans, collect);
+        score += 100;
+        scores.push(new TempScore("+100", character.position.x));
+        // text("+100", character.position.x + 50, height - 200);
+      }
+
+      // wool
+      if (random(1) < 0.002) {
+        let newWool = createSprite(random(0, width), 20, 40, 38);
+        newWool.addImage(wool_img);
+        newWool.addToGroup(wools);
+      }
+
+      for (let i = 0; i < wools.length; i++) {
+        let aWool = wools[i];
+        aWool.position.y += 9;
+        if (aWool.position.y > height - 120) {
+          aWool.remove();
+        }
+      }
+
+      if (character.collide(wools)) {
+        character.overlap(wools, collect);
+        score += 200;
+        scores.push(new TempScore("+200", character.position.x));
+        // text("+200", character.position.x + 50, height - 200);
+      }
+
+      // chicken
+      if (random(1) < 0.006) {
+        let newChicken = createSprite(random(0, width), 20, 70, 70);
+        newChicken.addImage(chicken_img);
+        newChicken.addToGroup(chickens);
+      }
+
+      for (let i = 0; i < chickens.length; i++) {
+        let aChicken = chickens[i];
+        aChicken.position.y += 4;
+        if (aChicken.position.y > height - 120) {
+          aChicken.remove();
+        }
+      }
+
+      if (character.collide(chickens)) {
+        character.overlap(chickens, collect);
+        score += 70;
+        scores.push(new TempScore("+70", character.position.x));
+        // text("+70", character.position.x + 50, height - 200);
+      }
+
+      // fish
+      if (random(1) < 0.008) {
+        let newFish = createSprite(random(0, width), 20, 80, 40);
+        newFish.addImage(fish_img);
+        newFish.addToGroup(fish);
+      }
+
+      for (let i = 0; i < fish.length; i++) {
+        let aFish = fish[i];
+        aFish.position.y += 3;
+        if (aFish.position.y > height - 120) {
+          aFish.remove();
+        }
+      }
+
+      if (character.collide(fish)) {
+        let collidedTime = remainingTime;
+        character.overlap(fish, collect);
+        score += 50;
+        scores.push(new TempScore("+50", character.position.x));
+      }
     }
 
     // game character
