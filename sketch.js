@@ -8,6 +8,9 @@ let charHeight = [168, 140, 130, 143, 143, 135];
 
 let ball_img, can_img, wool_img, chicken_img, fish_img, rock1_img, rock2_img;
 
+let cry1_img, cry2_img, cry3_img, cry4_img, cry5_img, cry6_img;
+let cry_imgs = [];
+
 let balls, cans, wools, chickens, fishGroup, rocks1, rocks2;
 
 let font
@@ -57,6 +60,14 @@ function preload() {
 
   rock1_img = loadImage('data/rock1.png');
   rock2_img = loadImage('data/rock2.png');
+
+  cry1_img = loadImage('data/cry1.png');
+  cry2_img = loadImage('data/cry2.png');
+  cry3_img = loadImage('data/cry3.png');
+  cry4_img = loadImage('data/cry4.png');
+  cry5_img = loadImage('data/cry5.png');
+  cry6_img = loadImage('data/cry6.png');
+
 }
 
 function setup() {
@@ -79,6 +90,8 @@ function setup() {
   fish = new Group();
   rocks1 = new Group();
   rocks2 = new Group();
+
+  cry_imgs = [[cry1_img, 300, 100], [cry2_img, 300, 120], [cry3_img, 290, 0], [cry4_img, 300, 100], [cry5_img, 300, 70], [cry6_img, 330, 0]];
 }
 
 function draw() {
@@ -279,6 +292,9 @@ function draw() {
       text(playAgain, width / 2, (height - 200) / 2 + 140);
       text(howToText, width / 2, (height - 200) / 2 + 190);
     }
+
+    image(cry_imgs[charIndex][0], width - cry_imgs[charIndex][1], (height - 200) / 2 - cry_imgs[charIndex][2]);
+
   }
 
   else {  // game starts
@@ -389,7 +405,7 @@ function draw() {
       if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
         rate1 += 0.00005;
       }
-      console.log(rate1);
+
       if (random(1) < rate1) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
         newRock1.addImage(rock1_img);
