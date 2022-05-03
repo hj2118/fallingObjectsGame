@@ -422,13 +422,10 @@ function draw() {
 
       else {
         if ((survivingTime > 0) && (survivingTime % 15 === 0)) {
-          rate1 += 0.00015;
-          rate2 += 0.00015;
+          rate1 += 0.0002;
+          rate2 += 0.0002;
         }
       }
-      
-      console.log(survivingTime);
-      console.log(rate1);
 
       if (random(1) < rate1) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
