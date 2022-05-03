@@ -10,6 +10,7 @@ let ball_img, can_img, wool_img, chicken_img, fish_img, rock1_img, rock2_img;
 
 let cry1_img, cry2_img, cry3_img, cry4_img, cry5_img, cry6_img;
 let cry_imgs = [];
+let cup_img;
 
 let balls, cans, wools, chickens, fishGroup, rocks1, rocks2;
 
@@ -68,6 +69,7 @@ function preload() {
   cry5_img = loadImage('data/cry5.png');
   cry6_img = loadImage('data/cry6.png');
 
+  cup_img = loadImage('data/cup.png');
 }
 
 function setup() {
@@ -294,7 +296,12 @@ function draw() {
     }
 
     image(cry_imgs[charIndex][0], width - cry_imgs[charIndex][1], (height - 200) / 2 - cry_imgs[charIndex][2]);
-
+    image(cup_img, 100, (height - 200) / 2 - 120);
+    image(wool_img, 200, (height - 200) / 2 - 35);
+    image(can_img, 210, (height - 200) / 2 + 10);
+    image(chicken_img, 220, (height - 200) / 2 + 70);
+    image(fish_img, 230, (height - 200) / 2 + 145);
+    image(ball_img, 250, (height - 200) / 2 + 195);
   }
 
   else {  // game starts
