@@ -413,9 +413,22 @@ function draw() {
       timeIncrease(currTime);
 
       // rock1
-      if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
-        rate1 += 0.00005;
+      if (gameMode === 2) {
+        if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
+          rate1 += 0.00005;
+          rate2 += 0.00005;
+        }
       }
+
+      else {
+        if ((survivingTime > 0) && (survivingTime % 15 === 0)) {
+          rate1 += 0.00015;
+          rate2 += 0.00015;
+        }
+      }
+      
+      console.log(survivingTime);
+      console.log(rate1);
 
       if (random(1) < rate1) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
@@ -438,10 +451,6 @@ function draw() {
       }
 
       // rock2
-      if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
-        rate2 += 0.00005;
-      }
-
       if (random(1) < rate2) {
         let newRock2 = createSprite(random(0, width), 20, 60, 52);
         newRock2.addImage(rock2_img);
