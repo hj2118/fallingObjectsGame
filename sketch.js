@@ -32,6 +32,11 @@ let spellTime = 300;
 let slowDown = false;
 let freeze = false;
 
+let rate1 = 0.005;
+let rate2 = 0.007;
+
+let fallFaster = false;
+
 let playAgain;
 
 function preload() {
@@ -77,7 +82,6 @@ function setup() {
 }
 
 function draw() {
-  console.log(survivingTime);
   // background
   noStroke();
   fill(135, 206, 235);
@@ -121,12 +125,15 @@ function draw() {
 
   else if (!gameStart && chooseMode) {
     textAlign(CENTER);
-    textFont(font, 24);
-    text("Choose a game mode by pressing:", width / 2, (height - 200) / 2 - 10);
+    textFont(font, 28);
+    text("Choose a game mode by pressing:", width / 2, (height - 200) / 2 - 45);
 
+    textFont(font, 24);
     textAlign(LEFT);
-    text("1: Gain a higher score in 60 seconds", width / 2 - 345, (height - 200) / 2 + 70);
-    text("2: Survive for a longer time, avoiding rocks", width / 2 - 345, (height - 200) / 2 + 120);
+    text("1: Gain a higher score in 60 seconds", width / 2 - 345, (height - 200) / 2 + 40);
+    text("You will be debuffed if you collide with a rock", width / 2 - 309, (height - 200) / 2 + 90);
+    text("2: Survive for a longer time, avoiding rocks", width / 2 - 345, (height - 200) / 2 + 150);
+    text("Rocks will fall more often as you survive longer", width / 2 - 309, (height - 200) / 2 + 200);
 
     if (keyWentDown('1')) {
       gameMode = 1;
@@ -379,7 +386,11 @@ function draw() {
       text("Score: " + score, 20, 80);
 
       // rock1
-      if (random(1) < 0.005) {
+      if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
+        rate1 += 0.00005;
+      }
+      console.log(rate1);
+      if (random(1) < rate1) {
         let newRock1 = createSprite(random(0, width), 20, 80, 59);
         newRock1.addImage(rock1_img);
         newRock1.addToGroup(rocks1);
@@ -400,7 +411,11 @@ function draw() {
       }
 
       // rock2
-      if (random(1) < 0.007) {
+      if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
+        rate2 += 0.00005;
+      }
+
+      if (random(1) < rate2) {
         let newRock2 = createSprite(random(0, width), 20, 60, 52);
         newRock2.addImage(rock2_img);
         newRock2.addToGroup(rocks2);
@@ -610,6 +625,9 @@ function keyPressed() {
       score = 0;
       remainingTime = 60;
       survivingTime = 0;
+
+      rate1 = 0.005;
+      rate2 = 0.007;
 
       // move the character to its initial position
       character.position.x = width / 2;
