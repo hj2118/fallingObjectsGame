@@ -1,7 +1,5 @@
 // falling objects
 
-// https://www.youtube.com/watch?v=_H9JIwWP7HQ
-
 let character;
 let charIndex;
 let charHeight = [168, 140, 130, 143, 143, 135];
@@ -435,28 +433,28 @@ function draw() {
       if (gameMode === 2) {
         if ((survivingTime > 0) && (survivingTime % 20 === 0)) {
         // if (moreRockTime === 0) {
+					moreRockTime = 20;
+
           rate1 += 0.00005;
           rate2 += 0.00005;
           // moreRock = true;
 
           text("MORE", width - 138, (height - 200) / 2 - 25);
           text("ROCKS!", width - 150, (height - 200) / 2 + 25);
-
-          moreRockTime = 20;
         }
       }
 
       else {
         if ((survivingTime > 0) && (survivingTime % 15 === 0)) {
         // if (moreRockTime === 0) {
+					moreRockTime = 15;
+
           rate1 += 0.0002;
           rate2 += 0.0002;
           // moreRock = true;
 
           text("MORE", width - 138, (height - 200) / 2 - 25);
           text("ROCKS!", width - 150, (height - 200) / 2 + 25);
-
-          moreRockTime = 15;
         }
       }
 
