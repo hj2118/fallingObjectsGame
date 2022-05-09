@@ -321,17 +321,17 @@ function draw() {
 
     fill(139, 69, 19, buffTime);
     if (freeze) {
-      text("FREEZE!", width - 150, height / 2);
+      text("FREEZE!", width - 150, (height - 200) / 2 + 50);
     }
 
     if (slowDown) {
-      text("SLOW", width - 148, (height - 200) / 2 - 25);
-      text("DOWN!", width - 150, (height - 200) / 2 + 25);
+      text("SLOW", width - 150, (height - 200) / 2 + 25);
+      text("DOWN!", width - 150, (height - 200) / 2 + 75);
     }
 
     if (speedUp) {
-      text("SPEED", width - 148, (height - 200) / 2 - 25);
-      text("UP!", width - 150, (height - 200) / 2 + 25);
+      text("SPEED", width - 150, (height - 200) / 2 + 25);
+      text("UP!", width - 150, (height - 200) / 2 + 75);
     }
 
     // 3 seconds until the game starts to get ready
@@ -442,9 +442,12 @@ function draw() {
           rate1 += 0.0002;
           rate2 += 0.0002;
 
+          textAlign(CENTER);
+          textFont(font, 32);
+
           fill(139, 69, 19);
-          text("MORE", width - 138, (height - 200) / 2 - 25);
-          text("ROCKS!", width - 150, (height - 200) / 2 + 25);
+          text("MORE", width - 150, (height - 200) / 2 + 25);
+          text("ROCKS!", width - 150, (height - 200) / 2 + 75);
         }
 
         rocks(gameMode);
