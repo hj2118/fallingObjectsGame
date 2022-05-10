@@ -353,6 +353,10 @@ function draw() {
 
     if (invincible) {
       text("INVINCIBLE", width - 150, (height - 200) / 2 + 50);
+
+      noStroke();
+      fill(127, 50);
+      rect(0, 0, width, height);
     }
 
     // 3 seconds until the game starts to get ready
