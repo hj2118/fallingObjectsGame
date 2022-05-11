@@ -38,7 +38,7 @@ let score = 0;
 let scores = [];
 
 // times
-let remainingTime = 60;
+let remainingTime = 61;
 let survivingTime = 0;
 let readyTime = 3;
 let startTime = 100;
@@ -98,7 +98,8 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth - 20, windowHeight - 20);
+  // createCanvas(windowWidth - 20, windowHeight - 20);
+  createCanvas(windowWidth, windowHeight);
   background(255);
 
   startGameText = "Press ENTER to start game";
@@ -297,7 +298,7 @@ function draw() {
 
     if ((gameMode === 1) || (gameMode === 2)) {
       text("Score: " + score, width / 2, (height - 200) / 2 + 25);
-      remainingTime = 60;
+      remainingTime = 61;
     }
 
     else if (gameMode === 3) {
@@ -392,7 +393,6 @@ function draw() {
       fill(139, 69, 19);
       text("START!", width / 2, (height - 100) / 2);
       currTime = millis();
-
     }
 
     // after the 3 seconds of getting ready, finally the game begins
@@ -417,14 +417,18 @@ function draw() {
         rocks(gameMode);
 
         // more rocks falling
-        if ((remainingTime === 20) || (remainingTime === 40)) {
+        if ((survivingTime === 20) || (survivingTime === 40)) {
           moreRock(gameMode);
         }
 
-        // displaying the time left until more rocks to fall
-        textAlign(RIGHT);
-        text("Until More Rocks: " + (20 - (60 - remainingTime) % 15), width - 20, 40);
+        timeIncrease(currTime);
 
+        // displaying the time left until more rocks to fall
+				if (remainingTime > 19) {
+					textAlign(RIGHT);
+					textFont(font, 24);
+					text("Until More Rocks: " + (20 - (survivingTime % 20)), width - 20, 40);
+				}
         if ((remainingTime === 30)) {
           invincible = true;
         }
@@ -480,6 +484,7 @@ function draw() {
 
         // displaying the time left until more rocks to fall
         textAlign(RIGHT);
+        textFont(font, 24);
         text("Until More Rocks: " + (15 - (survivingTime % 15)), width - 20, 40);
 
         // increasing the survivingTime eac second
@@ -966,7 +971,7 @@ function displayChar(charIndex) {
 function initialize() {
   score = 0;
 
-  remainingTime = 60;
+  remainingTime = 61;
   survivingTime = 0;
 
   buffTime = 300;
