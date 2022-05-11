@@ -98,8 +98,8 @@ function preload() {
 }
 
 function setup() {
-  // createCanvas(windowWidth - 20, windowHeight - 20);
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth - 20, windowHeight - 20);
+  // createCanvas(windowWidth, windowHeight);
   background(255);
 
   startGameText = "Press ENTER to start game";
